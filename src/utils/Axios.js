@@ -12,8 +12,11 @@ const options = {
   },
 };
 
-export const fetchFromAPI = async (url) => {
-  const { data } = await axios.get(`${BASE_URL}/${url}`, options);
-
-  return data;
+export const makeApiRequest = async (url) => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}/${url}`, options);
+    if (data) return data;
+  } catch (error) {
+    console.log(`loading => ${url} error`, error);
+  }
 };
