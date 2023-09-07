@@ -1,10 +1,10 @@
 import React from "react";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 
 import { ChannelCard, Loader, VideoCard } from "./";
 
-const Videos = ({ videos, direction }) => {
-  if (!videos?.length) return <Loader />;
+const Videos = ({ videos, direction, loading }) => {
+  if (loading) return <Loader />;
 
   return (
     <Stack
@@ -14,12 +14,18 @@ const Videos = ({ videos, direction }) => {
       alignItems="start"
       gap={2}
     >
-      {videos.map((item, idx) => (
-        <Box key={idx}>
-          {item.id.videoId && <VideoCard video={item} />}
-          {item.id.channelId && <ChannelCard channelDetail={item} />}
+      {videos && videos.length ? (
+        videos.map((item, idx) => (
+          <Box key={idx}>
+            {item.id.videoId && <VideoCard video={item} />}
+            {item.id.channelId && <ChannelCard channelDetail={item} />}
+          </Box>
+        ))
+      ) : (
+        <Box>
+          <Typography variant="subtitle1">No videos found</Typography>
         </Box>
-      ))}
+      )}
     </Stack>
   );
 };

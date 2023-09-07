@@ -1,51 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Box } from "@mui/material";
+import React from "react";
+import { Box, CardContent, CardMedia, Typography } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Link } from "react-router-dom";
 
-import { Videos, ChannelCard } from "./";
-import { makeApiRequest } from "../utils/Axios";
-
-const ChannelDetail = () => {
-  const [channelDetail, setChannelDetail] = useState();
-  const [videos, setVideos] = useState(null);
-
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchChannels = async () => {
-      const data = await makeApiRequest(`channels?part=snippet&id=${id}`);
-
-      setChannelDetail(data?.items[0]);
-
-      const videosData = await makeApiRequest(
-        `search?channelId=${id}&part=snippet%2Cid&order=date`
-      );
-
-      setVideos(videosData?.items);
-    };
-
-    fetchChannels();
-  }, [id]);
-
-  return (
-    <Box minHeight="95vh">
-      <Box>
-        <div
-          style={{
-            height: "300px",
-            background:
-              "linear-gradient(90deg, rgba(0,238,247,1) 0%, rgba(206,3,184,1) 100%, rgba(0,212,255,1) 100%)",
-            zIndex: 10,
+const ChannelCard = ({ channelDetail, marginTop }) => (
+  <Box
+    sx={{
+      boxShadow: "none",
+      borderRadius: "20px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: { xs: "356px", md: "320px" },
+      height: "326px",
+      margin: "auto",
+      marginTop,
+    }}
+  >
+    <Link to={`/channel/${channelDetail?.id?.channelId}`}>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          textAlign: "center",
+          color: "#fff",
+        }}
+      >
+        <CardMedia
+          image={channelDetail?.snippet?.thumbnails?.high?.url}
+          alt={channelDetail?.snippet?.title}
+          sx={{
+            borderRadius: "50%",
+            height: "180px",
+            width: "180px",
+            mb: 2,
+            border: "1px solid #e3e3e3",
           }}
         />
-        <ChannelCard channelDetail={channelDetail} marginTop="-93px" />
-      </Box>
-      <Box p={2} display="flex">
-        <Box sx={{ mr: { sm: "100px" } }} />
-        <Videos videos={videos} />
-      </Box>
-    </Box>
-  );
-};
+        <Typography variant="h6">
+          {channelDetail?.snippet?.title}{" "}
+          <CheckCircleIcon
+            sx={{ fontSize: "14px", color: "gray", ml: "5px" }}
+          />
+        </Typography>
+        {channelDetail?.statistics?.subscriberCount && (
+          <Typography sx={{ fontSize: "15px", fontWeight: 500, color: "gray" }}>
+            {parseInt(
+              channelDetail?.statistics?.subscriberCount
+            ).toLocaleString("en-US")}{" "}
+            Subscribers
+          </Typography>
+        )}
+      </CardContent>
+    </Link>
+  </Box>
+);
 
-export default ChannelDetail;
+export default ChannelCard;

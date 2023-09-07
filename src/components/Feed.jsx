@@ -5,16 +5,29 @@ import { makeApiRequest } from "../utils/Axios";
 import { Videos, Sidebar } from "./";
 
 const Feed = () => {
-  const [selectedCategory, setSelectedCategory] = useState("New");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [videos, setVideos] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setVideos(null);
+    // setVideos(null);
+    setLoading(true);
 
-    makeApiRequest(`search?part=snippet&q=${selectedCategory}`).then((data) =>
-      setVideos(data.items)
-    );
+    makeApiRequest(`search?part=snippet&q=${selectedCategory}`).then((data) => {
+      console.log("loading => data resp", data);
+      if (data && data.items && data.items.length) {
+        setVideos(data.items);
+        setLoading(false);
+      }
+    });
   }, [selectedCategory]);
+
+  const getVideos = async () => {};
+
+  useEffect(() => {
+    console.log("loading => videos", videos);
+  }, [videos]);
+
   return (
     <Stack sx={{ flexDirection: { sx: "column", md: "row" } }}>
       <Box
@@ -46,7 +59,7 @@ const Feed = () => {
           {selectedCategory} <span style={{ color: "#FC1503" }}>Videos</span>
         </Typography>
 
-        <Videos videos={videos} />
+        <Videos videos={videos} loading={loading} />
       </Box>
     </Stack>
   );
