@@ -38,10 +38,24 @@ const ChannelCard = ({ channelDetail, marginTop }) => (
             border: "1px solid #e3e3e3",
           }}
         />
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            justifyContent: "center",
+            m: 0,
+            p: 0,
+          }}
+        >
           {channelDetail?.snippet?.title}{" "}
           <CheckCircleIcon
-            sx={{ fontSize: "14px", color: "gray", ml: "5px" }}
+            sx={{
+              fontSize: "14px",
+              color: "gray",
+              mt: 0.5,
+            }}
           />
         </Typography>
         {channelDetail?.statistics?.subscriberCount && (

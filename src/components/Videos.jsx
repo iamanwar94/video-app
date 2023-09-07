@@ -13,6 +13,7 @@ const Videos = ({ videos, direction, loading }) => {
       justifyContent="start"
       alignItems="start"
       gap={2}
+      backgroundColor="pink"
     >
       {videos && videos.length ? (
         videos.map((item, idx) => (
